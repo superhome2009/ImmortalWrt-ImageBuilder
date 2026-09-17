@@ -664,16 +664,34 @@ jobs:
           custom_router_ip="${{ github.event.inputs.custom_router_ip }}"
           extra_content_ip="#### 管理地址 $custom_router_ip"
           echo -e "\n $extra_content_ip" >> ${{ github.workspace }}/mediatek-filogic/info.md
-          
-          
+
+      - name: List release files
+        run: |
+          find "${{ github.workspace }}/bin/targets/${{ env.platform }}" -maxdepth 1 -type f \
+            -printf '%p\n' | sort
+      
       - name: Upload ImmortalWrt as release assets
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.inputs.profile }}
           name: ImmortalWrt-Wireless
           body_path: ${{ github.workspace }}/mediatek-filogic/info.md
+          overwrite: true
           files: |
-            ${{ github.workspace }}/bin/targets/${{ env.platform }}/*
-          token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            ${{ github.workspace }}/bin/targets/${{ env.platform }}/immortalwrt-*.bin
+            ${{ github.workspace }}/bin/targets/${{ env.platform }}/immortalwrt-*.manifest
+            ${{ github.workspace }}/bin/targets/${{ env.platform }}/immortalwrt-*.bom.cdx.json
+            ${{ github.workspace }}/bin/targets/${{ env.platform }}/sha256sums
+            ${{ github.workspace }}/bin/targets/${{ env.platform }}/profiles.json
+            
+      #- name: Upload ImmortalWrt as release assets
+      #  uses: softprops/action-gh-release@v3
+      #  with:
+      #    tag_name: ${{ github.event.inputs.profile }}
+      #    name: ImmortalWrt-Wireless
+      #    body_path: ${{ github.workspace }}/mediatek-filogic/info.md
+      #    files: |
+      #      ${{ github.workspace }}/bin/targets/${{ env.platform }}/*
+      #    token: ${{ secrets.GITHUB_TOKEN }}
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
