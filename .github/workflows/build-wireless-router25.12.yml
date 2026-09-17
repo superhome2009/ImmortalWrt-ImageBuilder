@@ -634,7 +634,7 @@ jobs:
                       echo "platform=$case_platform" >> $GITHUB_ENV
                   else
                       # 默认分支
-                      tag=mediatek-filogic-openwrt-25.12.2
+                      tag=mediatek-filogic-openwrt-25.12.1
                   fi
                   ;;
             esac
